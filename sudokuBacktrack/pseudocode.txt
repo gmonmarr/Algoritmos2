@@ -1,0 +1,142 @@
+Inputs: 
+    - T for sudoku table
+    - row for row the number is in
+    - col for column the number is in
+    - num for the number we're validating
+
+Output: boolean value 
+
+function isSafe(T, row, col, n, num)
+    // n = 9 because our grid is 9x9
+
+    for i to n-1
+        if (T[row][i] == num)
+            return false
+
+    for i to n-1
+        if (T[i][col] == num)
+            return false
+
+    // Check the 3x3 subgrid (of our 9x9 sudoku grid)
+    startRow = row - (row % 3)
+    startCol = col - (col % 3)
+    for i from 0 to 2
+        for j from 0 to 2
+            if T[startRow + i][startCol + j] == num
+                return false
+
+    // if all checks pass, the number is safe to place
+    return true
+
+Inputs:
+    -  T for the sudoku table 
+    -  n for the size of table (9 for out 9x9 table)
+Output: boolean if the solution has been found
+
+function solveSudoku(T, n)
+    row, column = 0
+    isEmpty = true
+
+    // Find the next empty cell (value 0)
+    for row from 0 to n-1
+        for col from 0 to n-1
+            if T[row][col] == 0
+                isEmpty = false
+                Break from inner loop
+        if isEmpty == false
+            Break from outer loop
+
+    // if no empty cell is found, the board is solved
+    if isEmpty
+        return true
+
+    // Try placing numbers from 1 to n
+    for num from 1 to n
+        if isSafe(T, row, col, n, num)
+            T[row][col] = num
+
+            // Recursively try to solve the rest of the board
+            if solveSudoku(T, n)
+                return true
+
+            // if placing num didn't work, backtrack
+            T[row][col] = 0
+
+    // if no number can be placed, the puzzle is unsolvable
+    return false
+
+Inputs:
+    -  T for sudoku table
+    -  n for number for size of board (9, for a 9x9 board)
+Output: boolean if board is valid 
+
+function isValidBoard(T, n)
+    // Check rows and columns
+    for i from 0 to n-1
+        Create an empty set for rowSet and colSet
+        for j from 0 to n-1
+            // Check row uniqueness
+            if T[i][j] is not 0
+                if T[i][j] exists in rowSet
+                    return false
+                add T[i][j] to rowSet
+
+            // Check column uniqueness
+            if T[j][i] is not 0
+                if T[j][i] exists in colSet
+                    return false
+                add T[j][i] to colSet
+
+    // Check 3x3 subgrids
+    for row from 0 to n-1, incrementing by 3
+        for col from 0 to n-1, incrementing by 3
+            Create an empty set gridSet
+
+            // check the subgrid 
+            for i from 0 to 2
+                for j from 0 to 2
+                    num = T[row + i][col + j]
+                    if num is not 0
+                        if num exists in gridSet
+                            return false
+                        add num to gridSet
+
+    // if all checks pass, the board is valid
+    return true
+
+Input:
+    -  file containing sudoku board
+    -  n for board size (ex. 9 for 9x9)
+Output:
+    -  txt containing solution
+
+function main(file, n)
+    initialize sudokuBoard as matrix of n*n size
+
+    sudokuBoard = board from file
+    if isValoidBoard(sudokuBoard, n)
+        solveSudoku(sudokuBoard, n)
+    else
+        return "Board not valid"
+    
+    output to file from sudokuBoard
+
+
+for i to n-1
+    if (T[row][i] == num)
+        return false
+
+for i to n-1
+    if (T[i][col] == num)
+        return false
+
+// Check the 3x3 subgrid (of our 9x9 sudoku grid)
+startRow = row - (row % 3)
+startCol = col - (col % 3)
+for i from 0 to 2
+    for j from 0 to 2
+        if T[startRow + i][startCol + j] == num
+            return false
+
+// if all checks pass, the number is safe to place
+return true
